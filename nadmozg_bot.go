@@ -36,17 +36,28 @@ func main() {
 		//r1 := rand.New(sr)
 
         chatMessage := update.Message.Text
-        result, err := regexp.MatchString("/^нет$/i", chatMessage)
+        //regexp1 := regexp.MustCompile("(?i)бот")
+        result, _ := regexp.MatchString("(?i)бот|слыш", chatMessage)
         log.Println(result)
-        if result && (err != nil) && probably(20){
- 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Пидора ответ!")
-			//msg.ReplyToMessageID = update.Message.MessageID
+        if result {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, gopnicAnswer())
+			msg.ReplyToMessageID = update.Message.MessageID
 
 			bot.Send(msg)
         	continue
 		}
 
-		if (len(strings.Split(update.Message.Text, " ")) == 1) && probably(10) {
+		result, _ = regexp.MatchString("(?i)^нет$", chatMessage)
+		log.Println(result)
+		if result {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Пидора ответ!")
+			msg.ReplyToMessageID = update.Message.MessageID
+
+			bot.Send(msg)
+			continue
+		}
+
+		if (len(strings.Split(update.Message.Text, " ")) == 1) && probably(20) {
 			lex_redupl, err := huifma(update.Message.Text)
 			if err == nil {
 				msg := tgbotapi.NewMessage(update.Message.Chat.ID, lex_redupl)
@@ -56,8 +67,8 @@ func main() {
 			}
 			continue
 		}
-		if probably(7 ) {
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, gopnic_answer())
+		if probably(15 ) {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, gopnicAnswer())
 			msg.ReplyToMessageID = update.Message.MessageID
 			bot.Send(msg)
 		}
